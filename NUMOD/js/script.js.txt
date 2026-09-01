@@ -1,0 +1,14 @@
+<script>
+  const toggle = document.getElementById("themeToggle");
+  const circle = document.querySelector(".toggle-circle");
+
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      circle.textContent = "🌙";
+    } else {
+      circle.textContent = "☀️";
+    }
+  });
+</script>

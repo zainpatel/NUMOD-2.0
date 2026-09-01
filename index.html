@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUMOD Explore — Open Access Research Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+  ::selection { background: color-mix(in srgb, #7C5CFF 35%, transparent); }
+  @keyframes floatBlob { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-18px) scale(1.04); } }
+
+/* =========================
+   HERO BUTTONS
+========================= */
+
+.hero-button {
+  background: rgba(255,255,255,.12);
+  border: 1.5px solid rgba(255,255,255,.35);
+  color: white;
+  padding: 22px 46px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 19px;
+  cursor: pointer;
+  transition: transform .3s ease,
+              box-shadow .3s ease,
+              background .3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
+
+.hero-button:hover {
+  transform: translateY(-5px) scale(1.04);
+  background: rgba(255,255,255,.22);
+  box-shadow: 0 18px 36px rgba(0,0,0,.28);
+}
+
+
+/* =========================
+   JOURNAL DROPDOWN
+========================= */
+
+.journal-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.journal-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 100%;
+  background: #292d4d;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 12px;
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+
+  transition: opacity .25s ease,
+              transform .25s ease,
+              visibility .25s ease;
+
+  z-index: 100;
+}
+
+.journal-menu a {
+  display: block;
+  padding: 15px 22px;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.journal-menu a:hover {
+  background: rgba(255,255,255,.15);
+}
+
+
+/* Desktop: show when mouse moves over Journal */
+
+@media (min-width: 769px) {
+
+  .journal-dropdown:hover .journal-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* Mobile: make dropdown normal width */
+
+@media (max-width: 768px) {
+
+  .journal-menu {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .journal-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+}
+
+/* =========================
+   DARK MODE TOGGLE
+========================= */
+
+.theme-toggle {
+  width: 58px;
+  height: 30px;
+  border-radius: 30px;
+  border: 1px solid var(--cardBorder);
+  background: rgba(15,23,42,.12);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: background .35s ease;
+}
+
+.theme-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    var(--accent1),
+    var(--accent2)
+  );
+
+  transition: transform .45s cubic-bezier(.68,-.55,.27,1.55);
+
+  z-index: 2;
+}
+
+.theme-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  line-height: 1;
+  z-index: 3;
+
+  transition:
+    opacity .3s ease,
+    transform .4s ease;
+}
+
+.sun-icon {
+  left: 8px;
+}
+
+.moon-icon {
+  right: 8px;
+}
+
+
+/* Dark mode */
+
+.theme-toggle.dark .theme-knob {
+  transform: translateX(28px);
+}
+
+.theme-toggle.dark .sun-icon {
+  opacity: .35;
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.theme-toggle.dark .moon-icon {
+  opacity: 1;
+  transform: translateY(-50%) rotate(0deg) scale(1.1);
+}
+
+
+/* Light mode */
+
+.theme-toggle:not(.dark) .sun-icon {
+  opacity: 1;
+  transform: translateY(-50%) rotate(0deg) scale(1.1);
+}
+
+.theme-toggle:not(.dark) .moon-icon {
+  opacity: .35;
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+
+
+  /* ===== Responsive (mobile) overrides — !important needed to beat inline styles ===== */
+  @media (max-width: 900px) {
+    #heroGrid { grid-template-columns: 1fr !important; gap: 36px !important; }
+    #home h2 { font-size: 42px !important; line-height: 1.15 !important; }
+    #home p { font-size: 16px !important; }
+    #featureGrid { grid-template-columns: repeat(2, 1fr) !important; }
+    #aboutGrid { grid-template-columns: 1fr !important; }
+  }
+
+  @media (max-width: 600px) {
+    #headerInner { flex-wrap: wrap !important; justify-content: center !important; text-align: center !important; gap: 12px !important; padding: 14px 18px !important; }
+    #siteHeader nav { justify-content: center !important; flex-wrap: wrap !important; gap: 10px 16px !important; }
+    #home { padding: 60px 18px 46px !important; }
+    #home h2 { font-size: 28px !important; letter-spacing: -0.5px !important; }
+    #home p { font-size: 14.5px !important; }
+    #heroCtaRow { flex-direction: column !important; gap: 12px !important; }
+    #heroCtaRow a { width: 100% !important; box-sizing: border-box !important; text-align: center !important; padding: 16px 22px !important; font-size: 16px !important; }
+    #featureGrid { grid-template-columns: 1fr !important; }
+    #contactCard { gap: 24px !important; padding: 24px !important; }
+    #footerTop { flex-direction: column !important; gap: 28px !important; }
+    #footerLinksRow { gap: 32px !important; }
+  }
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="--bg:#f5f7fb; --fg:#12172a; --card:#ffffff; --cardBorder:rgba(15,23,42,0.12); --muted:#5b6472; --navBg:rgba(255,255,255,0.85); --accent1:#7C5CFF; --accent2:#22C3C3; background:var(--bg); color:var(--fg); min-height:100vh; font-family:'Inter',sans-serif; transition:background .35s ease, color .35s ease;">
+
+  <!-- HEADER -->
+  <header id="siteHeader" style="position:sticky; top:0; z-index:1000; background:var(--navBg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--cardBorder);">
+    <div id="headerInner" style="max-width:1320px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:16px 28px; gap:20px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:40px; height:40px; border-radius:11px; background:linear-gradient(135deg, var(--accent1), var(--accent2)); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 3px 10px color-mix(in srgb, var(--accent1) 40%, transparent);">
+          <svg viewBox="0 0 100 100" width="22" height="22" style="display:block;" aria-hidden="true">
+            <rect x="18" y="16" width="16" height="68" rx="3" fill="#fff" />
+            <rect x="66" y="16" width="16" height="68" rx="3" fill="#fff" />
+            <rect x="42" y="4" width="16" height="92" rx="3" fill="#fff" transform="rotate(-36 50 50)" />
+          </svg>
+        </div>
+        <div>
+          <h1 style="font-family:'Unbounded',sans-serif; font-size:26px; font-weight:700; letter-spacing:-.3px; margin:0; display:flex; align-items:baseline; gap:8px;">
+            <span style="background:linear-gradient(135deg, var(--accent1), var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;">NUMOD</span>
+            <span style="font-family:'Unbounded',sans-serif; font-size:26px; font-weight:700; letter-spacing:-.3px; background:linear-gradient(135deg, var(--accent1), var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;">EXPLORE</span>
+          </h1>
+        </div>
+      </div>
+
+      <nav style="display:flex; align-items:center; gap:26px;">
+        <a href="#home" style="text-decoration:none; color:var(--fg); font-weight:500; font-size:15px; opacity:.85;">Home</a>
+        <a href="#about" style="text-decoration:none; color:var(--fg); font-weight:500; font-size:15px; opacity:.85;">About</a>
+        <a href="#contact" style="text-decoration:none; color:var(--fg); font-weight:500; font-size:15px; opacity:.85;">Contact</a>
+
+   <button
+  id="themeToggle"
+  type="button"
+  aria-label="Toggle dark mode"
+  style="width:52px;height:28px;border-radius:20px;border:1px solid var(--cardBorder);background:rgba(15,23,42,.12);position:relative;cursor:pointer;padding:0;flex-shrink:0;overflow:hidden;"
+>
+  <span style="position:absolute;left:7px;top:6px;font-size:12px;line-height:1;pointer-events:none;">☀</span>
+
+  <span style="position:absolute;right:7px;top:6px;font-size:12px;line-height:1;pointer-events:none;">☾</span>
+
+  <span
+    id="themeKnob"
+    style="position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent2));transition:left .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.25);pointer-events:none;"
+  ></span>
+</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" data-screen-label="Hero" style="background:linear-gradient(135deg, #241f3d, #1b2340); color:white; padding:100px 28px 90px; position:relative; overflow:hidden;">
+    <div style="position:absolute; top:-120px; right:-100px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent1) 35%, transparent), transparent 70%); pointer-events:none; animation:floatBlob 9s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:-140px; left:-80px; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent2) 30%, transparent), transparent 70%); pointer-events:none; animation:floatBlob 11s ease-in-out infinite reverse;"></div>
+
+    <div id="heroGrid" style="max-width:1320px; margin:auto; display:grid; grid-template-columns:1.7fr 1fr; gap:48px; align-items:center; position:relative;">
+      <div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-size:64px; line-height:1.08; font-weight:700; letter-spacing:-1.5px; margin:0 0 22px; text-wrap:pretty;">Advancing knowledge, <span style="background:linear-gradient(135deg, var(--accent1), var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;">{{ heroHeadline }}</span></h2>
+        <p style="font-size:17.5px; opacity:.88; line-height:1.75; max-width:600px; margin:0 0 34px;">NUMOD Explore is a peer-reviewed international journal dedicated to rigorous, high-impact research — open access, expertly reviewed, and built for a global scholarly community.</p>
+        <div id="heroCtaRow" style="display:flex; gap:20px; flex-wrap:wrap;">
+          <a href="simulation.html" target="_blank" rel="noopener" style="background:rgba(255,255,255,.12); border:1.5px solid rgba(255,255,255,.35); color:white; padding:22px 46px; border-radius:14px; text-decoration:none; font-weight:700; font-size:19px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background .3s ease; box-shadow:0 8px 20px rgba(0,0,0,.15);" style-hover="transform:translateY(-5px) scale(1.04); background:rgba(255,255,255,.22); box-shadow:0 18px 36px rgba(0,0,0,.28);">Simulation</a>
+          <div class="journal-dropdown">
+
+  <button class="hero-button journal-btn" onclick="toggleJournal()">
+    Journal
+  </button>
+
+  <div class="journal-menu" id="journalMenu">
+    <a href="NUMOD/JOURNAL1.html">Journal 1</a>
+  </div>
+
+</div>
+          <a href="annotation.html" target="_blank" rel="noopener" style="background:rgba(255,255,255,.12); border:1.5px solid rgba(255,255,255,.35); color:white; padding:22px 46px; border-radius:14px; text-decoration:none; font-weight:700; font-size:19px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background .3s ease; box-shadow:0 8px 20px rgba(0,0,0,.15);" style-hover="transform:translateY(-5px) scale(1.04); background:rgba(255,255,255,.22); box-shadow:0 18px 36px rgba(0,0,0,.28);">Annotation</a>
+        </div>
+      </div>
+
+      <sc-if value="{{ showQuotePanel }}" hint-placeholder-val="{{ false }}">
+      <div style="background:rgba(255,255,255,.08); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.18); padding:36px 32px; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,.25);">
+        <div style="font-family:'Bricolage Grotesque',sans-serif; font-size:52px; line-height:1; opacity:.35; margin-bottom:6px;">"</div>
+        <p style="font-family:'Bricolage Grotesque',sans-serif; font-size:21px; line-height:1.5; margin:0 0 20px; font-weight:500;">Knowledge shared openly is knowledge multiplied.</p>
+        <p style="font-size:13.5px; opacity:.7; margin:0;">— Editorial Board, NUMOD Explore</p>
+      </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- FEATURE STRIP -->
+  <section style="max-width:1320px; margin:auto; padding:56px 28px 10px;">
+    <div id="featureGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
+      <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
+        <div style="background:var(--card); border:1px solid var(--cardBorder); border-radius:16px; padding:24px; box-shadow:0 6px 20px rgba(15,23,42,.08); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 16px 30px rgba(0,0,0,.14);">
+          <div style="width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg, var(--accent1), var(--accent2)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:15px; margin-bottom:14px;">{{ f.code }}</div>
+          <h4 style="font-family:'Bricolage Grotesque',sans-serif; font-size:15.5px; margin:0 0 6px;">{{ f.title }}</h4>
+          <p style="font-size:13.5px; color:var(--muted); line-height:1.6; margin:0;">{{ f.desc }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" data-screen-label="About" style="max-width:1320px; margin:auto; padding:70px 28px 70px;">
+    <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-size:34px; margin:0 0 22px;">About NUMOD Explore</h2>
+    <div id="aboutGrid" style="display:grid; grid-template-columns:1.4fr 1fr; gap:40px; align-items:start;">
+      <p style="line-height:1.9; font-size:16px; opacity:.9;">NUMOD Explore is an international open-access academic journal dedicated to publishing high-quality research across multiple disciplines. We promote knowledge sharing, innovation, and scholarly excellence through freely accessible publications, supported by a rigorous double-blind peer review process and a fast, transparent editorial workflow.</p>
+      <div style="background:var(--card); border:1px solid var(--cardBorder); border-radius:16px; padding:24px; box-shadow:0 6px 20px rgba(15,23,42,.08);">
+        <h4 style="font-family:'Bricolage Grotesque',sans-serif; font-size:15px; margin:0 0 14px;">Editorial Process</h4>
+        <div style="display:flex; flex-direction:column; gap:14px; font-size:14px; color:var(--muted);">
+          <sc-for list="{{ processSteps }}" as="step" hint-placeholder-count="4">
+            <div>{{ step.text }}</div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" data-screen-label="Contact" style="max-width:1320px; margin:auto; padding:0 28px 90px;">
+    <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-size:34px; margin:0 0 22px;">Contact</h2>
+    <div id="contactCard" style="background:var(--card); border:1px solid var(--cardBorder); border-radius:16px; padding:34px; box-shadow:0 6px 20px rgba(15,23,42,.08); display:flex; gap:60px; flex-wrap:wrap;">
+      <div>
+        <p style="font-size:12px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin:0 0 6px;">Email</p>
+        <a href="journal@numodexplore.com">support@numodexplore.com</a>
+      </div>
+      <div>
+        <p style="font-size:12px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin:0 0 6px;">Website</p>
+        <a href="https://numodexplore.com/">https://numodexplore.com/</a>
+      </div>
+      <div>
+        <p style="font-size:12px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin:0 0 6px;">Editorial Office</p>
+        <p style="font-size:16px; margin:0; font-weight:600;">Open Access &amp; Peer Review Desk</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:oklch(20% 0.04 290); color:white; padding:56px 28px 32px;">
+    <div style="max-width:1320px; margin:auto;">
+      <div id="footerTop" style="display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; padding-bottom:36px; border-bottom:1px solid rgba(255,255,255,.12); margin-bottom:24px;">
+        <div style="max-width:320px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, var(--accent1), var(--accent2)); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg viewBox="0 0 100 100" width="19" height="19" style="display:block;" aria-hidden="true">
+                <rect x="18" y="16" width="16" height="68" rx="3" fill="#fff" />
+                <rect x="66" y="16" width="16" height="68" rx="3" fill="#fff" />
+                <rect x="42" y="4" width="16" height="92" rx="3" fill="#fff" transform="rotate(-36 50 50)" />
+              </svg>
+            </div>
+            <div style="font-family:'Unbounded',sans-serif; font-size:20px; font-weight:700; display:flex; align-items:baseline; gap:6px;">NUMOD <span style="font-size:20px; font-weight:700;">EXPLORE</span></div>
+          </div>
+        </div>
+
+        <div id="footerLinksRow" style="display:flex; gap:64px; flex-wrap:wrap;">
+          <div>
+            <h5 style="font-size:13px; text-transform:uppercase; letter-spacing:.4px; opacity:.55; margin:0 0 14px;">Journal</h5>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <a href="#home" style="color:white; opacity:.8; text-decoration:none; font-size:14.5px;">Home</a>
+              <a href="#about" style="color:white; opacity:.8; text-decoration:none; font-size:14.5px;">About</a>
+              <a href="#contact" style="color:white; opacity:.8; text-decoration:none; font-size:14.5px;">Contact</a>
+            </div>
+          </div>
+          <div>
+            <h5 style="font-size:13px; text-transform:uppercase; letter-spacing:.4px; opacity:.55; margin:0 0 14px;">Resources</h5>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ footerLinks }}" as="link" hint-placeholder-count="4">
+                <a href="#" style="color:white; opacity:.8; text-decoration:none; font-size:14.5px;">{{ link.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <p style="opacity:.55; font-size:13.5px; margin:0;">© 2026 NUMOD Explore. All rights reserved.</p>
+        <p style="opacity:.4; font-size:12.5px; margin:0;">ISSN: Pending</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accentPalette&quot;: {
+    &quot;editor&quot;: &quot;color&quot;,
+    &quot;default&quot;: [&quot;#7C5CFF&quot;, &quot;#22C3C3&quot;],
+    &quot;options&quot;: [
+      [&quot;#7C5CFF&quot;, &quot;#22C3C3&quot;],
+      [&quot;#6366F1&quot;, &quot;#FB7185&quot;],
+      [&quot;#10B981&quot;, &quot;#F5B942&quot;],
+      [&quot;#E11D48&quot;, &quot;#64748B&quot;]
+    ],
+    &quot;tsType&quot;: &quot;string[]&quot;,
+    &quot;section&quot;: &quot;Appearance&quot;
+  },
+  &quot;heroHeadline&quot;: {
+    &quot;editor&quot;: &quot;text&quot;,
+    &quot;default&quot;: &quot;openly and globally.&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Content&quot;
+  },
+  &quot;statsPanelStyle&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;default&quot;: &quot;stats&quot;,
+    &quot;options&quot;: [&quot;stats&quot;, &quot;quote&quot;],
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Content&quot;
+  }
+}">
+const LIGHT_THEME = {
+  bg: "#f5f7fb", fg: "#12172a", card: "#ffffff",
+  cardBorder: "rgba(15,23,42,0.12)", muted: "#5b6472",
+  navBg: "rgba(255,255,255,0.85)"
+};
+const DARK_THEME = {
+  bg: "#0a0e1a", fg: "#e7e9f3", card: "#141a2c",
+  cardBorder: "rgba(255,255,255,0.14)", muted: "#9aa3b8",
+  navBg: "rgba(10,14,26,0.85)"
+};
+
+const PALETTE_DEFAULT = ["#7C5CFF", "#22C3C3"];
+
+const FEATURES = [
+  { code: "OA", title: "Open Access", desc: "Every paper free to read, download, and share worldwide." },
+  { code: "PR", title: "Peer Reviewed", desc: "Rigorous double-blind review by qualified experts." },
+  { code: "GL", title: "Global Reach", desc: "Readers and authors across 25+ countries." },
+  { code: "FT", title: "Fast Turnaround", desc: "Transparent, efficient editorial workflow." }
+];
+
+const PROCESS_STEPS = [
+  "1. Submission & initial screening",
+  "2. Double-blind peer review",
+  "3. Revision & editorial decision",
+  "4. Open-access publication"
+];
+
+const FOOTER_LINKS = ["Author Guidelines", "Publication Ethics", "Editorial Board", "Aims & Scope"];
+
+class Component extends DCLogic {
+  state = { dark: false };
+  rootRef = React.createRef();
+
+  applyPalette() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    const palette = (this.props && this.props.accentPalette) || PALETTE_DEFAULT;
+    root.style.setProperty("--accent1", palette[0] || PALETTE_DEFAULT[0]);
+    root.style.setProperty("--accent2", palette[1] || palette[0] || PALETTE_DEFAULT[1]);
+  }
+
+  componentDidMount() {
+    this.applyPalette();
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevPalette = prevProps && prevProps.accentPalette;
+    const curPalette = this.props && this.props.accentPalette;
+    if (prevPalette !== curPalette) this.applyPalette();
+  }
+
+  toggleDark = () => {
+    const dark = !this.state.dark;
+    const root = this.rootRef.current;
+    if (root) {
+      const theme = dark ? DARK_THEME : LIGHT_THEME;
+      Object.keys(theme).forEach((k) => root.style.setProperty("--" + k, theme[k]));
+    }
+    this.setState({ dark });
+  };
+
+  renderVals() {
+    const statsPanelStyle = (this.props && this.props.statsPanelStyle) || "stats";
+    const showStatsPanel = statsPanelStyle !== "quote";
+    return {
+      rootRef: this.rootRef,
+      toggleDark: this.toggleDark,
+      trackBg: this.state.dark
+  ? "rgba(255,255,255,0.14)"
+  : "rgba(15,23,42,0.12)",
+
+knobLeft: this.state.dark
+  ? "26px"
+  : "2px",
+      features: FEATURES,
+      processSteps: PROCESS_STEPS.map((text) => ({ text })),
+      footerLinks: FOOTER_LINKS.map((label) => ({ label })),
+      showStatsPanel: showStatsPanel,
+      showQuotePanel: !showStatsPanel,
+      heroHeadline: (this.props && this.props.heroHeadline) || "openly and globally."
+    };
+  }
+}
+
+</script>
+<script>
+function toggleJournal() {
+  const menu = document.getElementById("journalMenu");
+
+  if (window.innerWidth <= 768) {
+    menu.classList.toggle("show");
+  }
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const toggle = document.getElementById("themeToggle");
+  const knob = document.getElementById("themeKnob");
+  const root = document.querySelector("[style*='--bg:#f5f7fb']");
+
+  if (!toggle || !knob || !root) return;
+
+  let darkMode = false;
+
+  toggle.addEventListener("click", function () {
+
+    darkMode = !darkMode;
+
+    if (darkMode) {
+
+      root.style.setProperty("--bg", "#0a0e1a");
+      root.style.setProperty("--fg", "#e7e9f3");
+      root.style.setProperty("--card", "#141a2c");
+      root.style.setProperty("--cardBorder", "rgba(255,255,255,0.14)");
+      root.style.setProperty("--muted", "#9aa3b8");
+      root.style.setProperty("--navBg", "rgba(10,14,26,0.85)");
+
+      toggle.style.background = "rgba(255,255,255,0.14)";
+
+      knob.style.left = "26px";
+
+      knob.style.transform = "rotate(180deg)";
+
+    } else {
+
+      root.style.setProperty("--bg", "#f5f7fb");
+      root.style.setProperty("--fg", "#12172a");
+      root.style.setProperty("--card", "#ffffff");
+      root.style.setProperty("--cardBorder", "rgba(15,23,42,0.12)");
+      root.style.setProperty("--muted", "#5b6472");
+      root.style.setProperty("--navBg", "rgba(255,255,255,0.85)");
+
+      toggle.style.background = "rgba(15,23,42,0.12)";
+
+      knob.style.left = "2px";
+
+      knob.style.transform = "rotate(0deg)";
+    }
+
+  });
+
+});
+</script>
+</body>
+</body>
